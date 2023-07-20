@@ -1,5 +1,20 @@
-RA8875 library b11p10 [Testing gold release]
-===========================================
+RA8875 library b11p10 [Testing gold release] - bl0x fork
+========================================================
+
+##### bl0x fork
+
+The main reason for this fork is to add support for RP2040 and given the
+amount of activity on the original repo I don't expect a lot to happen in
+response to pull requests. I'll try anyways, but this version definitely
+works with RP2040.
+
+Things to keep in mind:
+ - ISR handling for touch panels does not work, use polling mode (RP2040 is
+   fast enough and it saves a pin too).
+ - Even with careful treading I may have broken support for other parts, and
+   I am unable to test if they are still working.
+
+##### Original README follows
 
 **Wiki added!** https://github.com/sumotoy/RA8875/wiki<br>
 This is the last <b>'development'</b> version, last known <b>stable</b> version is here:<br>
@@ -73,6 +88,7 @@ Check 'Proof of working' in wiki.<br>
  - Arduino MEGA
  - Arduino YUN
  - Many arduino variants based on AVR
+ - Raspberry Pi RP2040
  <br>
  <b>Display tested:</b><br>
  - EastRising RA8875 5" (480x272)
