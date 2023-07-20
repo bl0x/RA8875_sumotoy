@@ -70,6 +70,11 @@ Part of RA8875 library from https://github.com/sumotoy/RA8875
 	#include <math.h>
 	#include <avr/pgmspace.h>
 	#define __PRGMTAG_	PROGMEM
+#elif defined(ARDUINO_ARCH_RP2040)
+	#include "Arduino.h"
+	#include <pico/stdlib.h>
+	#define _FASTCPU
+	#define ___RP2040
 #elif defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
 /* 
 --------------------------------------------------------------

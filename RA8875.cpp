@@ -66,7 +66,7 @@ Bit:	Called by:		In use:
 */
 /**************************************************************************/
 //------------------------------TEENSY 3/3.1 ---------------------------------------
-#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
+#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(___RP2040)
 	RA8875::RA8875(const uint8_t CSp,const uint8_t RSTp,const uint8_t mosi_pin,const uint8_t sclk_pin,const uint8_t miso_pin)
 	{
 		_mosi = mosi_pin;
@@ -435,6 +435,11 @@ void RA8875::begin(const enum RA8875sizes s,uint8_t colors)
 			digitalWrite(_cs, HIGH);
 			_errorCode |= (1 << 3);//set
 		#endif
+	#elif defined(___RP2040)
+		SPI.setTX(_mosi);
+		SPI.setRX(_miso);
+		SPI.setSCK(_sclk);
+		SPI.begin();
 	#elif !defined(ENERGIA)//everithing but ENERGIA
 		#if defined(___DUESTUFF)// DUE
 			#if defined(SPI_DUE_MODE_EXTENDED)
@@ -4165,7 +4170,7 @@ void RA8875::fillEllipse(int16_t xCenter, int16_t yCenter, int16_t longAxis, int
       yCenter:   y location of the ellipse center
       longAxis:  Size in pixels of the long axis
       shortAxis: Size in pixels of the short axis
-      curvePart: Curve to draw in clock-wise dir: 0[180-270°],1[270-0°],2[0-90°],3[90-180°]
+      curvePart: Curve to draw in clock-wise dir: 0[180-270 deg],1[270-0 deg],2[0-90 deg],3[90-180 deg]
       color: RGB565 color
 */
 /**************************************************************************/
@@ -4190,7 +4195,7 @@ void RA8875::drawCurve(int16_t xCenter, int16_t yCenter, int16_t longAxis, int16
       yCenter:   y location of the ellipse center
       longAxis:  Size in pixels of the long axis
       shortAxis: Size in pixels of the short axis
-      curvePart: Curve to draw in clock-wise dir: 0[180-270°],1[270-0°],2[0-90°],3[90-180°]
+      curvePart: Curve to draw in clock-wise dir: 0[180-270 deg],1[270-0 deg],2[0-90 deg],3[90-180 deg]
       color: RGB565 color
 */
 /**************************************************************************/
@@ -5204,6 +5209,8 @@ bool RA8875::touched(bool safe)
 				if (_touchEnabled){
 					#if defined(___TEENSYES)
 						if (!digitalReadFast(_intPin)) {
+					#elif defined(___RP2040)
+						if (!gpio_get(_intPin)) {
 					#else
 						if (!digitalRead(_intPin)) {
 					#endif

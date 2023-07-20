@@ -220,7 +220,7 @@ class RA8875 : public Print {
 	// void 		debugData(uint16_t data,uint8_t len=8);
 	// void 		showLineBuffer(uint8_t data[],int len);
 //------------- INSTANCE -------------------------------------------------------------------
-	#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
+	#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(___RP2040)
 		RA8875(const uint8_t CSp,const uint8_t RSTp=255,const uint8_t mosi_pin=11,const uint8_t sclk_pin=13,const uint8_t miso_pin=12);
 	#elif defined(__MKL26Z64__)//TeensyLC
 		RA8875(const uint8_t CSp,const uint8_t RSTp=255,const uint8_t mosi_pin=11,const uint8_t sclk_pin=13,const uint8_t miso_pin=12);
@@ -478,7 +478,7 @@ using Print::write;
 	#endif
 
 	
-	#if defined(___TEENSYES)//all of them (32 bit only)
+	#if defined(___TEENSYES) || defined(___RP2040)//all of them (32 bit only)
 		uint8_t 				  _cs;
 		uint8_t 				  _miso, _mosi, _sclk;
 	#elif defined(ENERGIA)
@@ -705,6 +705,8 @@ using Print::write;
 		
 		#if defined(___TEENSYES)//all of them (32 bit only)
 			digitalWriteFast(_cs, LOW);
+		#elif defined(___RP2040)
+			gpio_put(_cs, LOW);
 		#elif !defined(ENERGIA)//UNO,DUE,ETC.
 			#if defined(___DUESTUFF) && defined(SPI_DUE_MODE_EXTENDED)//DUE extended SPI
 				//nothing
@@ -733,6 +735,8 @@ using Print::write;
 		__attribute__((always_inline)) {
 	#if defined(___TEENSYES)//all of them (32 bit only)
 		digitalWriteFast(_cs, HIGH);
+	#elif defined(___RP2040)
+		gpio_put(_cs, HIGH);
 	#elif !defined(ENERGIA)
 		#if defined(___DUESTUFF) && defined(SPI_DUE_MODE_EXTENDED)//DUE extended SPI
 			//nothing
