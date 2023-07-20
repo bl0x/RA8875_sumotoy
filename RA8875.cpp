@@ -439,7 +439,9 @@ void RA8875::begin(const enum RA8875sizes s,uint8_t colors)
 		SPI.setTX(_mosi);
 		SPI.setRX(_miso);
 		SPI.setSCK(_sclk);
+		pinMode(_cs, OUTPUT);
 		SPI.begin();
+		digitalWrite(_cs, HIGH);
 	#elif !defined(ENERGIA)//everithing but ENERGIA
 		#if defined(___DUESTUFF)// DUE
 			#if defined(SPI_DUE_MODE_EXTENDED)
