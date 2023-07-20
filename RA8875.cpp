@@ -5206,13 +5206,15 @@ bool RA8875::touched(bool safe)
 	} else {//not use ISR, digitalRead method
 			#if defined(USE_FT5206_TOUCH)
 			//TODO
-			
+
 			#elif defined(USE_RA8875_TOUCH)
 				if (_touchEnabled){
 					#if defined(___TEENSYES)
 						if (!digitalReadFast(_intPin)) {
 					#elif defined(___RP2040)
-						if (!gpio_get(_intPin)) {
+						/* don't care about the INT
+						 * pin */
+						if(1) {
 					#else
 						if (!digitalRead(_intPin)) {
 					#endif
@@ -5417,6 +5419,8 @@ void RA8875::touchBegin(void)
 		2,1,0:ADC Clock Setting (000...111) set fixed to 010: (System CLK) / 4, 10Mhz Max! */
 		#if defined(___TEENSYES) ||  defined(___DUESTUFF)//fast 32 bit processors
 			_writeRegister(RA8875_TPCR0, TP_ENABLE | TP_ADC_SAMPLE_16384_CLKS | TP_ADC_CLKDIV_32);
+		#elif defined(___RP2040)
+			_writeRegister(RA8875_TPCR0, TP_ENABLE | TP_ADC_SAMPLE_4096_CLKS | TP_ADC_CLKDIV_16);
 		#else
 			_writeRegister(RA8875_TPCR0, TP_ENABLE | TP_ADC_SAMPLE_4096_CLKS | TP_ADC_CLKDIV_16);
 		#endif
